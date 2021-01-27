@@ -9,8 +9,9 @@ module.exports = app => {
 
     // user
     app.post('/user', UserController.addUser);
+    app.get('/users', UserController.getUserList);
+    app.get('/user', UserController.getUserByEmail);
     app.get('/user/:id', UserController.getUser);
-    app.get('/user', UserController.getUserList);
     app.put('/user/:id', UserController.editUser);
     app.delete('/user/:id', UserController.deleteUser);
 

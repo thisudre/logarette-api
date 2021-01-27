@@ -1,8 +1,12 @@
 const database = require('../models/index');
 class UserController {
+
     static async addUser(req, res) {
         const newUser = req.body;
         try {
+            if (UserController.getUserByEmail(req, res) !== null) {
+                throw new Error('User already exists');
+            }
             const newUserCreated = await database.User.create(newUser);
             return res.status(200).json(newUserCreated);
         } catch (error) {
@@ -14,6 +18,16 @@ class UserController {
         const id = req.params.id;
         try {
             const user = await database.User.findOne({where: {id: Number(id)}});
+            return res.status(200).json(user);
+        } catch (error) {
+            return res.status(400).json(error.message);
+        }
+    }
+
+    static async getUserByEmail(req, res) {
+        const email = req.body.email;
+        try {
+            const user = await database.User.findOne({where: {email: email}});
             return res.status(200).json(user);
         } catch (error) {
             return res.status(400).json(error.message);
